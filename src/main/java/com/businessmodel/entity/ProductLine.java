@@ -1,63 +1,85 @@
 package com.businessmodel.entity;
 
+
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "productlines")
 public class ProductLine {
 
-	@Id
-	private String productLine;
-	private String textDescription;
+    @Id
+    @Column(name = "productLine", length = 50, nullable = false)
+    private String productLine;
 
-	@Column(columnDefinition = "mediumtext")
-	private String htmlDescription;
+    @Column(name = "textDescription", length = 4000)
+    private String textDescription;
 
-	@OneToMany(mappedBy = "productLine")
-	private List<Product> products;
+    @Lob
+    @Column(name = "htmlDescription", columnDefinition = "MEDIUMTEXT")
+    private String htmlDescription;
 
-	public ProductLine() {
+    @Lob
+    @Column(name = "image", columnDefinition = "MEDIUMBLOB")
+    private byte[] image;
 
-	}
+    //  One ProductLine → Many Products
+    @OneToMany(mappedBy = "productLine", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Product> products=new ArrayList<>();
 
-	public ProductLine(String productLine, String textDescription, String htmlDescription, List<Product> products) {
+    // Constructors
+    public ProductLine() {
+    	
+    }
 
-		this.productLine = productLine;
-		this.textDescription = textDescription;
-		this.htmlDescription = htmlDescription;
-		this.products = products;
-	}
+    public ProductLine(String productLine, String textDescription, String htmlDescription, byte[] image) {
+        this.productLine = productLine;
+        this.textDescription = textDescription;
+        this.htmlDescription = htmlDescription;
+        this.image = image;
+    }
 
-	public String getProductLine() {
-		return productLine;
-	}
+    // Getters and Setters
+    public String getProductLine() {
+        return productLine;
+    }
 
-	public void setProductLine(String productLine) {
-		this.productLine = productLine;
-	}
+    public void setProductLine(String productLine) {
+        this.productLine = productLine;
+    }
 
-	public String getTextDescription() {
-		return textDescription;
-	}
+    public String getTextDescription() {
+        return textDescription;
+    }
 
-	public void setTextDescription(String textDescription) {
-		this.textDescription = textDescription;
-	}
+    public void setTextDescription(String textDescription) {
+        this.textDescription = textDescription;
+    }
 
-	public String getHtmlDescription() {
-		return htmlDescription;
-	}
+    public String getHtmlDescription() {
+        return htmlDescription;
+    }
 
-	public void setHtmlDescription(String htmlDescription) {
-		this.htmlDescription = htmlDescription;
-	}
+    public void setHtmlDescription(String htmlDescription) {
+        this.htmlDescription = htmlDescription;
+    }
 
-	public List<Product> getProducts() {
-		return products;
-	}
+    public byte[] getImage() {
+        return image;
+    }
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }
+
