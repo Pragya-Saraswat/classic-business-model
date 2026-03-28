@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDTO {
+public class CustomerDto {
     @NotNull
     private Integer customerNumber;
     @NotNull
