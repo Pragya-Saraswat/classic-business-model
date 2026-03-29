@@ -1,0 +1,32 @@
+package com.businessmodel.dto;
+
+import com.businessmodel.dto.CustomerDto;
+import com.businessmodel.entity.Customer;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class EntityMapper {
+
+    // ================= CUSTOMER =================
+
+    public Customer toEntity(CustomerDto dto) {
+        Customer customer = new Customer();
+        customer.setCustomerNumber(dto.getCustomerNumber());
+        customer.setCustomerName(dto.getCustomerName());
+        customer.setCountry(dto.getCountry());
+        customer.setPhone(dto.getPhone());
+        customer.setCreditLimit(dto.getCreditLimit());
+        return customer;
+    }
+
+    public CustomerDto toDto(Customer c) {
+        return new CustomerDto(
+                c.getCustomerNumber(),
+                c.getCustomerName(),
+                c.getCountry(),
+                c.getPhone(),
+                c.getCreditLimit()
+        );
+    }
+}
