@@ -1,7 +1,9 @@
 package com.businessmodel.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -9,11 +11,10 @@ import java.sql.Date;
 @AllArgsConstructor
 @Builder
 public class OrderDto {
-
-    private int orderNumber;
-    private Date orderDate;
-    private Date requiredDate;
-    private Date shippedDate;
+    private Integer orderNumber;
+    private LocalDate orderDate;
+    private LocalDate requiredDate;
+    private LocalDate shippedDate;
     private String status;
     private String customerName;
 }

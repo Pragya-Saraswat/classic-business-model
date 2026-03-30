@@ -1,3 +1,4 @@
+
 package com.businessmodel.service.impl;
 
 import com.businessmodel.dto.CustomerDto;
@@ -23,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<OrderDto> getOrderByCustomerIdAndStatus(Integer customerId, String status) {
+    public List<OrderDto> getOrdersByCustomerIdAndStatus(Integer customerId, String status) {
         return List.of();
     }
 
