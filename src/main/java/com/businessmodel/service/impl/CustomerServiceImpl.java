@@ -1,11 +1,11 @@
 package com.businessmodel.service.impl;
 
 import com.businessmodel.dto.*;
-import com.businessmodel.dto.mapper.CustomerEntityMapper;
-import com.businessmodel.dto.mapper.OrderEntityMapper;
 import com.businessmodel.entity.Customer;
 import com.businessmodel.entity.Employee;
 import com.businessmodel.entity.Order;
+import com.businessmodel.mapper.CustomerEntityMapper;
+import com.businessmodel.mapper.OrderEntityMapper;
 import com.businessmodel.repository.CustomerRepo;
 import com.businessmodel.repository.OrderRepo;
 import com.businessmodel.repository.PaymentRepo;

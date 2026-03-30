@@ -1,4 +1,4 @@
-package com.businessmodel.dto.mapper;
+package com.businessmodel.mapper;
 
 import com.businessmodel.dto.OrderDto;
 import com.businessmodel.entity.Order;
