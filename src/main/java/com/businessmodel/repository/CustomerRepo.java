@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 	Page<Customer> findByCountry(String country, Pageable pageable);
-	public List<Customer> findTop10ByOrderByCreditLimitDesc();
+	Page<Customer> findAllByOrderByCreditLimitDesc(Pageable pageable);
 }

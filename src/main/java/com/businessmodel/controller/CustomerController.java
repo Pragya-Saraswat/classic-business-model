@@ -15,14 +15,12 @@ import com.businessmodel.service.CustomerService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/customers")
-@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
-
+    private final CustomerService customerService;
     private final OrderService orderService;
 
     @GetMapping
@@ -32,6 +30,14 @@ public class CustomerController {
             @RequestParam(defaultValue = "10") int size) {
 
         return customerService.getCustomersByCountry(country, page, size);
+    }
+    
+    @GetMapping("/top")
+    public List<CustomerDto> getTopCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return customerService.getTopCustomers(page, size);
     }
 
     @GetMapping("/{id}/orders")
