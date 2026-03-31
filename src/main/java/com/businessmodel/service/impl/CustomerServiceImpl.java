@@ -36,12 +36,17 @@ public class CustomerServiceImpl implements CustomerService {
                 customerRepo.findByCountry(country, pageable);
         return customerPage.map(CustomerMapper::toCustomerDto);
     }
+    
     @Override
-    public List<CustomerDto> getTopCustomers() {
-        List<Customer> customer=customerRepo.findTop10ByOrderByCreditLimitDesc();
-        List<CustomerDto> customerDto=new ArrayList<>();
-        customer.forEach(c->customerDto.add(CustomerMapper.toCustomerDto(c)));
-        return customerDto;
+    public List<CustomerDto> getTopCustomers(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return customerRepo.findAllByOrderByCreditLimitDesc(pageable)
+                .getContent()
+                .stream()
+                .map(CustomerMapper::toCustomerDto)
+                .toList();
     }
 
     @Override
