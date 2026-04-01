@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -50,6 +51,12 @@ public class Customer {
 
     @Column(name = "country")
     private String country;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Order> orders;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Payment> payments;
 
     @ManyToOne
     @JoinColumn(name = "salesRepEmployeeNumber", referencedColumnName = "employeeNumber")

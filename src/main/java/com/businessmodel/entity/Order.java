@@ -36,7 +36,7 @@ public class Order {
 	@Column(name = "comments")
 	private String comments;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
 	private Customer customer;
 

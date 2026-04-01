@@ -28,12 +28,12 @@ public class OrderDetail {
     @Column(name = "orderLineNumber", nullable = false)
     private Short orderLineNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("orderNumber")
     @JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("productCode")
     @JoinColumn(name = "productCode", referencedColumnName = "productCode")
     private Product product;

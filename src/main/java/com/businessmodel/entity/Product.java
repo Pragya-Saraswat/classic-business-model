@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -22,6 +23,9 @@ public class Product {
 
     @Column(name = "productName")
     private String productName;
+    
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetails;
 
     @ManyToOne
     @JoinColumn(name = "productLine", referencedColumnName = "productLine")

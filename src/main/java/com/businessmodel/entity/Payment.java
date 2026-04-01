@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "payments")
@@ -19,6 +20,9 @@ public class Payment {
 
     @EmbeddedId
     private PaymentId id;
+    
+    @OneToMany(mappedBy = "customer")
+    private List<Payment> payments;
 
     @ManyToOne
     @MapsId("customerNumber")
