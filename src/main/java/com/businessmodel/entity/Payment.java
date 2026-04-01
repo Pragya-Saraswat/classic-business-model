@@ -18,21 +18,18 @@ import java.util.List;
 @Setter
 public class Payment {
 
-    @EmbeddedId
-    private PaymentId id;
-    
-    @OneToMany(mappedBy = "customer")
-    private List<Payment> payments;
+	@EmbeddedId
+	private PaymentId id;
 
-    @ManyToOne
-    @MapsId("customerNumber")
-    @JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
-    private Customer customer;
+	@ManyToOne
+	@MapsId("customerNumber")
+	@JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
+	private Customer customer;
 
-    @Column(name = "paymentDate", nullable = false)
-    private LocalDate paymentDate;
+	@Column(name = "paymentDate", nullable = false)
+	private LocalDate paymentDate;
 
-    @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
+	@Column(name = "amount", nullable = false)
+	private BigDecimal amount;
 
 }

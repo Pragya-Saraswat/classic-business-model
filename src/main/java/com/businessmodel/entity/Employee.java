@@ -16,37 +16,34 @@ import lombok.Setter;
 @Setter
 public class Employee {
 
-    @Id
-    @Column(name = "employeeNumber")
-    private Integer employeeNumber;
+	@Id
+	@Column(name = "employeeNumber")
+	private Integer employeeNumber;
 
-    @Column(name = "lastName")
-    private String lastName;
+	@Column(name = "lastName")
+	private String lastName;
 
-    @Column(name = "firstName")
-    private String firstName;
+	@Column(name = "firstName")
+	private String firstName;
 
-    @Column(name = "extension")
-    private String extension;
+	@Column(name = "extension")
+	private String extension;
 
-    @Column(name = "email")
-    private String email;
-    
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Payment> payments;
-    
-    @OneToMany(mappedBy = "salesRep", fetch = FetchType.LAZY)
-    private List<Customer> customers;
+	@Column(name = "email")
+	private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
-    private Office office;
+	@OneToMany(mappedBy = "salesRep", fetch = FetchType.LAZY)
+	private List<Customer> customers;
 
-    @ManyToOne
-    @JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
-    private Employee manager;
+	@ManyToOne
+	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
+	private Office office;
 
-    @Column(name = "jobTitle")
-    private String jobTitle;
+	@ManyToOne
+	@JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
+	private Employee manager;
+
+	@Column(name = "jobTitle")
+	private String jobTitle;
 
 }
