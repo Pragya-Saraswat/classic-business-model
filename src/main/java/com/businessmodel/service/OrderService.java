@@ -10,5 +10,5 @@ public interface OrderService {
     List<OrderDto> getOrdersByStatus(String status);
     List<OrderDto> getOrdersByCustomerId(Integer customerId);
     OrderWithDetailsDto getOrderWithDetails(Integer orderId);
-    Page<OrderDto> getOrdersByCustomer(Integer customerId, int page, int size);
+    List<OrderDto> getOrdersByCustomer(Integer customerId);
 }

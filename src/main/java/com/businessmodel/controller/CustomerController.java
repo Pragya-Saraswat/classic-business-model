@@ -40,13 +40,13 @@ public class CustomerController {
         return customerService.getTopCustomers(page, size);
     }
 
-	@GetMapping("/{id}/orders")
-	public ResponseEntity<?> getOrdersByCustomer(@PathVariable Integer id, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
-		return new ResponseEntity<>(orderService.getOrdersByCustomer(id, page, size), HttpStatus.OK);
-	}
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@PathVariable Integer id) {
+        return new ResponseEntity<>(orderService.getOrdersByCustomer(id), HttpStatus.OK);
+    }
 
-	@GetMapping("/{id}/orders_status")
+
+    @GetMapping("/{id}/orders_status")
 	public ResponseEntity<List<OrderDto>> getOrdersByCustomerIdAndStatus(@PathVariable Integer id, @RequestParam String status) {
 		return new ResponseEntity<>(customerService.getOrdersByCustomerIdAndStatus(id, status), HttpStatus.OK);
 	}
