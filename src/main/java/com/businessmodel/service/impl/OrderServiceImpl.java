@@ -48,15 +48,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getOrdersByCustomerIdAndStatus(Integer customerId, String status) {
-
-        return orderRepo.findByCustomer_CustomerNumberAndStatus(customerId, status)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public OrderWithDetailsDto getOrderWithDetails(Integer orderId) {
 
         Order order = orderRepo.findById(orderId)

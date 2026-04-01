@@ -53,8 +53,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .toList();
     }
 
-
-
 	@Override
 	public List<OrderDto> getOrdersByCustomer(Integer customerId) {
 		List<Order> orders = orderRepo.findByCustomer_CustomerNumber(customerId);
