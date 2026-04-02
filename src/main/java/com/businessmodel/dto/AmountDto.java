@@ -3,7 +3,6 @@ package com.businessmodel.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.businessmodel.entity.Payment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;

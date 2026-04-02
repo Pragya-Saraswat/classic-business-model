@@ -1,92 +1,111 @@
 package com.businessmodel.service.impl;
 
-import com.businessmodel.dto.*;
-import com.businessmodel.entity.*;
+import com.businessmodel.dto.OrderDto;
+import com.businessmodel.dto.OrderWithDetailsDto;
+import com.businessmodel.entity.Order;
 import com.businessmodel.exception.BadRequestException;
 import com.businessmodel.exception.ResourceNotFoundException;
 import com.businessmodel.mapper.OrderMapper;
-import com.businessmodel.repository.*;
+import com.businessmodel.repository.OrderRepo;
 import com.businessmodel.service.OrderService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepo orderRepo;
-    private final CustomerRepo customerRepo;
-    private final OrderDetailRepo orderDetailRepo;
+	private final OrderRepo orderRepo;
 
-    @Override
-    public List<OrderDto> getOrdersByCustomer(Integer customerId) {
-        if(customerId==null){
-            throw new BadRequestException("Customer Id cannot be null");
-        }
+	// ----------- Orders by Status ---------
+	@Override
+	public Page<OrderDto> getOrdersByStatus(String status, int page, int size) {
 
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not find with id: " + customerId));
-        List<Order> order = orderRepo.findByCustomer(customer);
-        List<OrderDto> orderDto= new ArrayList<>();
-        order.forEach(o -> orderDto.add(OrderMapper.toOrderDto(o)));
-        return orderDto;
-    }
+		if (status == null || status.isBlank()) {
+			throw new BadRequestException("Status cannot be null or empty");
+		}
 
-    @Override
-    public List<OrderDto> getOrdersByStatus(String status) {
-        if(status==null || status.isBlank()){
-            throw new BadRequestException("Status cannot be null or empty");
-        }
-        List<Order> orders = orderRepo.findByStatus(status);
-        List<OrderDto> orderDto = new ArrayList<>();
-        orders.forEach(order -> orderDto.add(OrderMapper.toOrderDto(order)));
-        return orderDto;
-    }
+		if (page < 0 || size <= 0) {
+			throw new BadRequestException("Invalid pagination parameters");
+		}
 
-    @Override
-    public List<OrderDto> getOrdersByCustomerId(Integer customerId) {
+		Pageable pageable = PageRequest.of(page, size);
 
-        Customer customer= customerRepo.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
-        List<Order> orders = orderRepo.findByCustomer(customer);
-        List<OrderDto> orderDto = new ArrayList<>();
-        orders.forEach(order -> orderDto.add(OrderMapper.toOrderDto(order)));
-        return orderDto;
-    }
+		Page<Order> orders = orderRepo.findByStatus(status, pageable);
 
-    @Override
-    public OrderWithDetailsDto getOrderWithDetails(Integer orderId) {
-        Order order=orderRepo.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not find with id: " + orderId));
-        return OrderMapper.toOrderWithDetailsDto(order);
-    }
+		if (orders.isEmpty()) {
+			throw new ResourceNotFoundException("No orders found with status: " + status);
+		}
 
-    @Override
-    public Page<OrderDto> getOrdersByCustomerIdAndStatus(Integer customerId, String status, int page, int size) {
+		return orders.map(OrderMapper::toOrderDto);
+	}
 
-        if (customerId == null) {
-            throw new BadRequestException("Customer ID cannot be null");
-        }
+	// ----------- Orders by Customer ----------
+	@Override
+	public Page<OrderDto> getOrdersByCustomer(Integer customerId, int page, int size) {
 
-        if (status == null || status.isBlank()) {
-            throw new BadRequestException("Status cannot be empty");
-        }
+		if (customerId == null) {
+			throw new BadRequestException("Customer ID cannot be null");
+		}
 
-        if (page < 0 || size <= 0) {
-            throw new BadRequestException("Invalid pagination parameters");
-        }
+		if (page < 0 || size <= 0) {
+			throw new BadRequestException("Invalid pagination parameters");
+		}
 
-        Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size);
 
-        Page<Order> orders = orderRepo.findByCustomerCustomerNumberAndStatus(customerId, status, pageable);
+		Page<Order> orders = orderRepo.findByCustomerCustomerNumber(customerId, pageable);
 
-        if (orders.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "No orders found for customer id: " + customerId + " with status: " + status);
-        }
+		if (orders.isEmpty()) {
+			throw new ResourceNotFoundException("No orders found for customer id: " + customerId);
+		}
 
-        return orders.map(OrderMapper::toOrderDto);
-    }
+		return orders.map(OrderMapper::toOrderDto);
+	}
 
+	// ------------ Orders by Customer + Status ------------
+	@Override
+	public Page<OrderDto> getOrdersByCustomerIdAndStatus(Integer customerId, String status, int page, int size) {
+
+		if (customerId == null) {
+			throw new BadRequestException("Customer ID cannot be null");
+		}
+
+		if (status == null || status.isBlank()) {
+			throw new BadRequestException("Status cannot be empty");
+		}
+
+		if (page < 0 || size <= 0) {
+			throw new BadRequestException("Invalid pagination parameters");
+		}
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		Page<Order> orders = orderRepo.findByCustomerCustomerNumberAndStatus(customerId, status, pageable);
+
+		if (orders.isEmpty()) {
+			throw new ResourceNotFoundException(
+					"No orders found for customer id: " + customerId + " with status: " + status);
+		}
+
+		return orders.map(OrderMapper::toOrderDto);
+	}
+
+	// ------------ Order with Details ----------
+	@Override
+	public OrderWithDetailsDto getOrderWithDetails(Integer orderId) {
+
+		if (orderId == null) {
+			throw new BadRequestException("Order ID cannot be null");
+		}
+
+		Order order = orderRepo.findById(orderId)
+				.orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+		return OrderMapper.toOrderWithDetailsDto(order);
+	}
 }
