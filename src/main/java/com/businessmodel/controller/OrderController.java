@@ -5,7 +5,12 @@ import com.businessmodel.dto.OrderWithDetailsDto;
 import com.businessmodel.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 @RestController
@@ -13,19 +18,16 @@ import org.springframework.data.domain.Page;
 @RequiredArgsConstructor
 public class OrderController {
 
-	private final OrderService orderService;
+    private final OrderService orderService;
 
-	// -------- Get order with details ------
-	@GetMapping("/{id}")
-	public OrderWithDetailsDto getOrderWithDetails(@PathVariable Integer id) {
-		return orderService.getOrderWithDetails(id);
-	}
+    @GetMapping("/{id}")
+    public OrderWithDetailsDto getOrderWithDetails(@PathVariable Integer id) {
+        return orderService.getOrderWithDetails(id);
+    }
 
-	// ------- Get orders by status ------
-	@GetMapping
-	public Page<OrderDto> getOrdersByStatus(@RequestParam String status, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "5") int size) {
+    @GetMapping
+    public ResponseEntity<?> getOrdersByStatus(@RequestParam(required = false) String status) {
+        return  new ResponseEntity<>(orderService.getOrdersByStatus(status), HttpStatus.OK);
+    }
 
-		return orderService.getOrdersByStatus(status, page, size);
-	}
 }

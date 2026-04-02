@@ -1,69 +1,67 @@
 package com.businessmodel.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import com.businessmodel.entity.Customer;
+import com.businessmodel.exception.BadRequestException;
+import com.businessmodel.exception.BusinessException;
+import com.businessmodel.exception.ResourceNotFoundException;
+import com.businessmodel.repository.CustomerRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.businessmodel.dto.AmountDto;
 import com.businessmodel.entity.Payment;
-import com.businessmodel.exception.BadRequestException;
-import com.businessmodel.exception.ResourceNotFoundException;
 import com.businessmodel.mapper.AmountMapper;
 import com.businessmodel.repository.PaymentRepo;
 import com.businessmodel.service.PaymentService;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-    private final PaymentRepo paymentRepo;
+    @Autowired
+    private PaymentRepo paymentRepo;
+    @Autowired
+    private CustomerRepo customerRepo;
 
-    // -------- Total Revenue --------
     @Override
     public AmountDto getTotalRevenue() {
-
-        List<Payment> payments = paymentRepo.findAll();
-
-        if (payments.isEmpty()) {
-            throw new ResourceNotFoundException("No payments found");
+        List<Payment> allPayments = paymentRepo.findAll();
+        if (allPayments.isEmpty()) {
+            throw new BusinessException("No payment records found");
         }
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (Payment payment : payments) {
+        BigDecimal totalRevenue = BigDecimal.ZERO;
+        for (Payment payment : allPayments) {
             if (payment.getAmount() != null) {
-                total = total.add(payment.getAmount());
+                totalRevenue = totalRevenue.add(payment.getAmount());
             }
         }
+        return AmountMapper.toRevenueDTO(totalRevenue);
 
-        return AmountMapper.toRevenueDTO(total);
     }
 
-    // -------- Customer Total spending --------
     @Override
     public AmountDto getTotalPaymentAmount(Integer customerId) {
-
-        if (customerId == null) {
-            throw new BadRequestException("Customer ID cannot be null");
+        if (customerId == null || customerId <= 0) {
+            throw new BadRequestException("Invalid customer ID: " + customerId);
         }
+
+        customerRepo.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
 
         List<Payment> payments = paymentRepo.findByCustomerCustomerNumber(customerId);
 
         if (payments.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "No payments found for customer id: " + customerId);
+            throw new BusinessException("No payments found for customer id: " + customerId);
         }
 
         BigDecimal total = BigDecimal.ZERO;
-
         for (Payment payment : payments) {
             if (payment.getAmount() != null) {
                 total = total.add(payment.getAmount());
             }
         }
-
         return AmountMapper.toCustomerSpendingDto(customerId, total);
     }
 }

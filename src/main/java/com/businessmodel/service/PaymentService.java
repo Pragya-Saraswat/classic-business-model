@@ -4,8 +4,8 @@ import com.businessmodel.dto.AmountDto;
 
 public interface PaymentService {
 
-	public AmountDto getTotalRevenue();
+    public AmountDto getTotalRevenue();
 
-	public AmountDto getTotalPaymentAmount(Integer customerId);
+    public AmountDto getTotalPaymentAmount(Integer customerId);
 
 }
