@@ -1,26 +1,21 @@
 package com.businessmodel.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.businessmodel.dto.AmountDto;
 import com.businessmodel.service.PaymentService;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
-@RequestMapping("api/payments")
+@RequestMapping("/api/payments")
+@RequiredArgsConstructor
 public class PaymentController {
-	@Autowired
-	private PaymentService paymentService;
 
-	public PaymentController(PaymentService paymentService) {
-		this.paymentService = paymentService;
-	}
+    private final PaymentService paymentService;
 
-	@GetMapping("/revenue")
-	public ResponseEntity<AmountDto> getTotalRevenue() {
-		return new ResponseEntity<>(paymentService.getTotalRevenue(), HttpStatus.OK);
-	}
+    // ----------- Total Revenue -----------
+    @GetMapping("/revenue")
+    public AmountDto getTotalRevenue() {
+        return paymentService.getTotalRevenue();
+    }
 }

@@ -1,15 +1,11 @@
 package com.businessmodel.controller;
 
 import com.businessmodel.dto.ProductDto;
-import com.businessmodel.entity.ProductLine;
 import com.businessmodel.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/products")
@@ -18,8 +14,13 @@ public class ProductController {
 
     private final ProductService productService;
 
+    // ------------ By ProductLine ---------
     @GetMapping
-    public ResponseEntity<List<ProductDto>> findProductsByProductLine(@RequestParam ProductLine productLine) {
-        return new  ResponseEntity<>(productService.findProductsByProductLine(productLine), HttpStatus.OK);
+    public Page<ProductDto> findProductsByProductLine(
+            @RequestParam String productLine,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return productService.findProductsByProductLine(productLine, page, size);
     }
 }
