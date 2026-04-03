@@ -29,12 +29,33 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor
-public class OrderServiceImplTest {
+class OrderServiceImplTest {
 
     @Mock
     private OrderRepo orderRepo;
     @InjectMocks
     private OrderServiceImpl orderService;
 
+    @Test
+    void testGetOrderWithDetailsSuccess() {
+
+        final Customer customer = new Customer();
+        customer.setCustomerName("Test");
+
+        final Order order = new Order();
+        order.setCustomer(customer);
+        order.setOrderDetails(new ArrayList<>());
+
+        when(orderRepo.findById(1)).thenReturn(Optional.of(order));
+        final OrderWithDetailsDto result =
+                orderService.getOrderWithDetails(1);
+        assertNotNull(result);
+    }
+    @Test
+    void testGetOrderWithDetailsNotFound() {
+        when(orderRepo.findById(1)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class,
+                () -> orderService.getOrderWithDetails(1));
+    }
 
 }
