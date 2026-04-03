@@ -31,5 +31,19 @@ public class ProductServiceImplTest {
     @InjectMocks
     private ProductServiceImpl productService;
 
+    @Test
+    void testGetProductsSuccess() {
+        when(productRepo.findProductByProductLine(any(), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(new Product())));
+        final Page<ProductDto> result =
+                productService.findProductsByProductLine(new ProductLine(),0,10);
+        assertFalse(result.isEmpty());
+    }
+    @Test
+    void testGetProductsInvalid() {
+        assertThrows(BadRequestException.class,
+                () -> productService.findProductsByProductLine(null,0,10));
+    }
+
 
 }
