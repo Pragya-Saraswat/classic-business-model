@@ -58,4 +58,25 @@ class OrderServiceImplTest {
                 () -> orderService.getOrderWithDetails(1));
     }
 
+    @Test
+    void testGetOrdersByStatusSuccess() {
+        final Customer customer = new Customer();
+        customer.setCustomerName("Test");
+
+        final Order order = new Order();
+        order.setCustomer(customer);
+        order.setOrderDetails(new ArrayList<>());
+
+        when(orderRepo.findByStatus(eq("Shipped"), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(order)));
+        final Page<OrderDto> result =
+                orderService.getOrdersByStatus("Shipped",0,10);
+        assertFalse(result.isEmpty());
+    }
+    @Test
+    void testGetOrdersByStatusInvalid() {
+        assertThrows(BadRequestException.class,
+                () -> orderService.getOrdersByStatus("",0,10));
+    }
+
 }
