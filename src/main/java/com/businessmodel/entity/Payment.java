@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class Payment {
 
 	@EmbeddedId
-	private PaymentId id;
+	private PaymentId paymentId;
 
 	@ManyToOne
 	@MapsId("customerNumber")

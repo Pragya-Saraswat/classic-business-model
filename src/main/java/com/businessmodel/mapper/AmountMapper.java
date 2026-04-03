@@ -27,7 +27,7 @@ public class AmountMapper {
 		paymentId.setCheckNumber(dto.getCheckNumber());
 
 		final Payment payment = new Payment();
-		payment.setId(paymentId);
+		payment.setPaymentId(paymentId);
 		payment.setPaymentDate(dto.getPaymentDate());
 		payment.setAmount(dto.getAmount());
 
@@ -43,8 +43,8 @@ public class AmountMapper {
 
 		final AmountDto dto = new AmountDto();
 
-		dto.setCustomerNumber(payment.getId().getCustomerNumber());
-		dto.setCheckNumber(payment.getId().getCheckNumber());
+		dto.setCustomerNumber(payment.getPaymentId().getCustomerNumber());
+		dto.setCheckNumber(payment.getPaymentId().getCheckNumber());
 		dto.setPaymentDate(payment.getPaymentDate());
 		dto.setAmount(payment.getAmount());
 
